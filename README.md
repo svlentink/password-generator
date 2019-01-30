@@ -2,8 +2,12 @@
 
 You can find this tool
 [online](https://lent.ink/projects/pwd/)
+and as a
+[chrome extension](https://chrome.google.com/webstore/detail/password-generator/jfifacfjklgckibildbhokcaknpgjgaf)
 
-## Chrome extension
+## Installation of Chrome extension using source code
+
+THIS IS NOT NEEDED, see link above.
 
 How to install this unpacked chrome extension:
 + download the files in the folder `chrome-extension` ([link to zip](https://lent.ink/projects/pwd/pass-gen-chrome-ext.zip)
