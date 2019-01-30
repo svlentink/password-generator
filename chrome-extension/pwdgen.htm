@@ -1,0 +1,141 @@
+<html>
+<head>
+<meta name="viewport" content="width=300">
+<style>
+section {
+  width: 300px;
+  margin: 0 auto;
+}
+article {
+  margin-top: 0.5em;
+  width:15em;
+  border-left: 1px solid gray;
+  padding: 0.3em;
+  border-radius: 10px;
+}
+button { margin-right:3%; }
+hr { width: 98%; }
+#addPWAbtn {
+  width:98%;
+  margin: 10 auto;
+  font-size:120%;
+  background-color:red;
+  color: yellow;
+  border-radius:25px;
+  display:none;
+}
+p {
+  display:none;
+  font-style:italic;
+}
+#showHelpBtn {
+  display: block;
+  float: right;
+  border-radius:50px;
+  border:1px solid;
+  font-size:150%;
+}
+</style>
+<title>Password generator</title>
+<link rel="icon" 
+      type="image/png" 
+      href="icon.png" >
+
+<link rel="manifest" href="web-app-manifest.json">
+</head>
+<body>
+
+<section id='pwdgen'>
+<!--insert-h1-here-->
+
+<button id='showHelpBtn'>?</button>
+<p>
+  This password generator generates a unique password for every service (domain)
+  you use.
+  You only have to remember a single master passphrase.
+</p>
+
+<article>
+  <p>
+    Insert the domain you want a password for here.
+    This will result in a unique password for every domain (website).
+  </p>
+  Apex domain
+  <br/>
+  <input id="apex" value="google.com"/>
+  <p>
+    Use 'google.com' and not 'www.google.com'.
+    The <a href='pass-gen-chrome-ext.zip'>chrome-extension</a>
+    does this for you.
+    We suggest keeping a spreadsheet with all domain + username
+    you use (but NOT the password!).
+  </p>
+</article>
+<article>
+  <p>
+    Here you insert your secret phrase.
+    This secret phrase, together with the field above
+    are used to create a cryptographic hash,
+    which will be your password.
+  </p>
+  Secret phrase
+  <button id='eyebtn'>&#128065;</button>
+  <button id='savebtn'>&#x1f4be;</button>
+  <br/>
+  <input id='secret' value='some long sentence'/>
+  <p>
+    The eye button turns the field to a readable field.
+    The save button stores the secret phrase to localStorage.
+    To remove your secret from the localStorage,
+    just put anything in the field and hit save.
+  </p>
+</article>
+<article>
+  <p>
+    Two buttons to generate a password.
+    One should always generate the long password,
+    unless the service does not accept strong passwords
+    or you need to type it and cannot use the tool to
+    copy and paste.
+  </p>
+  Generate password
+  <br/>
+  <button id='fullpwdbtn'>full size (28)</button>
+  <button id='shortpwdbtn'>short (12)</button>
+  <br/>
+  and copy to clipboard
+</article>
+<article>
+  <p>
+    With this bottom field,
+    you do nothing.
+    You can peek to see what the password is,
+    but since it is already in your paste buffer,
+    just simply go to the service (website)
+    and hit CTRL + V (paste) in the input field.
+  </p>
+  Password:
+  <input disabled id='output' style='width:10px;'/>
+  <button id='enlargeOutputfldbtn'>&gt;</button>
+</article>
+
+<button id='addPWAbtn'>Add as App</button>
+
+</section>
+
+
+
+<hr/>
+<section>
+Is it secure? how does it work?
+the
+<a href='pass-gen-chrome-ext.zip'>chrome-extension</a>
+and the source code can all be found at:
+<a href='https://github.com/svlentink/password-generator'>github.com/svlentink/password-generator</a>
+</section>
+
+<script src="crypto-js.js"></script>
+<script src='pwdgen.js'></script>
+</body>
+
+</html>

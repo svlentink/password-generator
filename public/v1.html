@@ -1,0 +1,271 @@
+<html>
+<head>
+<!-- https://cdn.lent.ink/generated/bower_components/crypto-js/crypto-js.js -->
+<script type="text/javascript" src="chrome-extension/crypto-js.js"></script>
+<style>
+section {
+  width: 550px;
+  margin:0 auto;
+  padding: 25px;
+  margin-bottom: 50px;
+  border: 5px solid;
+  border-radius: 10px;
+  border-bottom: 0;
+}
+input { width: 350px; }
+</style>
+<title>Password generator</title>
+</head>
+<body>
+<section>
+<h1>Password generator</h1>
+<table>
+  <tr>
+    <td>
+      <a href='https://www.google.com/search?q=what+is+an+apex+domain'>Apex</a>
+    </td>
+    <td>
+      <input id="apex" value="google.com"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Secret phrase
+    </td>
+    <td>
+      <input id='secret' value='some long sentence'/>
+      <button onclick='eye()'>&#128065;</button>
+      <button onclick='save()'>&#x1f4be;</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Generate</td>
+    <td>
+<!--
+      prefix
+      <input id='base64prefix' style='width:30px;'/>
+      +
+-->
+      <button onclick='sha1base64()'>SHA1base64 (default)</button>
+    </td>
+  </tr>
+  <tr style='opacity:0.5;'>
+    <td></td>
+    <td>
+      prefix
+      <input id='prefix' style='width:30px;'/>
+      +
+      <button onclick='sha1()'>SHA1</button>
+      <button onclick='sha3()'>SHA3</button>
+      <button onclick='hmac()'>HMAC</button>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Password:
+    </td>
+    <td>
+      <input disabled id='output'/>
+    </td>
+  </tr>
+</table>
+
+<script>
+var saved = localStorage.getItem('pwddatastr')
+if (saved !== null) {
+  document.getElementById('secret').value = saved
+  sha1base64()
+}
+
+function sha1base64(){ generate(function(apex,secret, prefix){
+  var str = apex + secret
+  var hash = CryptoJS.SHA1(str).toString()
+  for (var i=0;i<10;i++) { // probability of 1/100^10 that it fails
+    console.log('Hash used for base64',hash)
+    var pairs = hash.match(/\w{2}/g)
+    var binarr = pairs.map(function(a){return String.fromCharCode(parseInt(a, 16));} )
+    var binstr = binarr.join("")
+    var base64 = btoa(binstr)
+    if ( /[0-9]/.test(base64)
+        && /[A-Z]/.test(base64)
+        && /[a-z]/.test(base64) )
+      break
+    else {
+      hash = CryptoJS.SHA1(hash).toString()
+      console.log('Applying another shasum, this a 1/100.')
+    }
+
+  }
+  //var prefix = document.getElementById('base64prefix').value
+  return base64
+}) }
+function sha1(){ generate(function(a,s,p){return p + CryptoJS.SHA1(a+s)}) }
+function sha3(){ generate(function(a,s,p){return p + CryptoJS.SHA3(a+s)}) }
+function hmac(){ generate(function(a,s,p){return p + CryptoJS.HmacSHA3(a,s)})}
+function generate(func) {
+  var apex = document.getElementById('apex').value
+  var secret = getSecVal()
+  var prefix = document.getElementById('prefix').value
+  var pwd = func(apex, secret, prefix).toString()
+  document.getElementById('output').value = pwd
+}
+function getSecVal() {
+  var secretelem = document.getElementById('secret')
+  secretelem.type = 'password'
+  return secretelem.value
+}
+function eye() {
+  var e = document.getElementById("secret")
+  if(e.type === 'text') return
+
+  e.value = ''
+  e.type = 'text'
+}
+function save() {
+  localStorage.setItem('pwddatastr',getSecVal())
+  alert('Saved to LocalStorage')
+}
+</script>
+</section>
+
+<section>
+<h2>Is it secure?</h2>
+The hash generated gives you up to 160bit password strength,
+depending on the passphrase.
+Passwords are unique for every website,
+since the domain is hashed.
+When you create an account at a malicious service,
+it is not able to login into any of your other accounts.
+<br/>
+You could have multiple pass phrases,
+e.g. one for all work related, one for social media and one for remaining accounts.
+<br/>
+NOTE: some website have a max length on a password,
+this means a lower strenght,
+especially since the hash part is
+<a href='https://stackoverflow.com/questions/12618321/what-pool-of-characters-do-md5-and-sha-have'>hexadecimal</a>.
+But the requirement of max length already indicates that such a service
+has bad security.
+</section>
+
+
+<section>
+<h2>How does it work?</h2>
+<i>Found out later that
+<a href='http://lesspass.com'>lesspass</a>
+does the same thing.
+But requires more parameters and does not come preinstalled (<code>shasum</code>).</i>
+<br/>
+It is inspired by
+<a href='https://pwdhash.github.io/website/'>Stanford PwdHash</a>
+and works by doing
+<br/>
+<code> echo -n 'apex.tldPASSPHRASE' | shasum</code>
+<br/>
+(to avoid storing <code>history</code>, prepend a space to <code>echo</code>)
+<br/>
+It is a concatenation of the domain you want a password for,
+together with a phrase that you use.
+This string is then used to calculate a hash,
+which is your password.
+To allow for specific password requirements,
+we prefix the hash with a capital letter and a special character.
+We picked '<span id='prefixletter'>R</span>' since it is the
+<span class='yearnr'>18</span>th letter of the alphabet
+and we changed the password of this website in 20<span class='yearnr'>18</span>.
+(the prefilled prefix on the password generator is updated each year to promote password rotation,
+please also update your secret phrase)
+<script>
+  var year = Number((new Date()).getFullYear().toString().substr(2))
+  var prel = String.fromCharCode(year+64)
+  document.querySelector('#prefix').value = prel + '_'
+  //document.querySelector('#base64prefix').value = prel.toLowerCase() + 0 + prel
+  document.querySelector('.yearnr').innerText = year
+  document.querySelector('#prefixletter').innerText = prel
+</script>
+</section>
+
+<section>
+<h2>Update: base64</h2>
+Since multiple websites have a upperlimit of 32 characters for a password,
+the default feature now produces 28 chars with the same strength.
+But how did we do this?
+We just convert the SHA1 sum output (hex) to base64.
+<br/>
+<code>echo -n 'apex.tldPASSPHRASE'|shasum|cut -f1 -d" "|xxd -r -p|base64</code>
+<br/>
+<code>echo -n 'apex.tldPASSPHRASE'|shasum|awk '{print $1}'|xxd -r -p|base64</code>
+<br/>
+This provides us with 28 chars of which the last one is a special char ('=').
+We tested this with 1M records
+<br/>
+<code>for i in {1..1000000};do echo -n $i|shasum|xxd -r -p|base64;done</code>
+and found out that 9858 have no number [0-9],
+0 have no letter [a-z]
+and 2 have no capital letter [A-Z].
+To be sure that all three type of characters are present,
+we append
+<code>|grep [0-9]|grep [A-Z]|grep [a-z]</code>
+to our initial command.
+If we now get no output (probability of 1%),
+we just preform a second shasum:
+<br/>
+<code>
+echo -n 360351|shasum|cut -f1 -d\ |tr -d $'\n'|shasum|cut -f1 -d\ |
+<br/>
+xxd -r -p|base64|grep [0-9]|grep [A-Z]|grep [a-z]
+</code>
+<br/>
+Note that we need to remove the newline (tr) after the first round,
+or you can manually use the output of the first round with
+<code>echo -n</code>.
+But don't worry, the tool above does this for you,
+it's just to explain the inner working of this tool.
+<!--
+Therefore we prefix the base64 string with
+a letter,
+a number and a capital letter.
+Which brings us to 31 characters.
+You could choose to only use a number,
+but to provide a generic solution,
+we suggest all three.
+-->
+</section>
+
+<section>
+<h2>What about a password manager?</h2>
+The motivation for this password manager was the backup requirement
+of normal password managers.
+This is the main advantage of this solution.
+<br/>
+Disadvantages compared to password manager;
+<ul>
+<li>Less bits per char, resulting in weaker passwords when truncated
+(max length on password input field)</li>
+<li>When your secret sentence is compromised,
+one could generate all your passwords
+(the same goes for your password on your online password manager)</li>
+<li>Your sentence unlocks the power to generate all your passwords,
+also the passwords for not yet existing services,
+while a password manager only stores the passwords that are actually used</li>
+<li>This password mechanism allows one to generate them on the terminal
+and other insecure places, which could be a risk</li>
+<li>Just like a regular password manager with random passwords,
+the password cannot be memorized</li>
+<li>This system allows you to use multiple master passwords (e.g. social, work, finance, developers etc.)
+however, for teams, this would result in more password rotations.</li>
+<br/>
+Other disadvantages;
+<li>A key based hash (HMAC) or slow hash (Argon2, [S|B]crypt, PBKDF2)
+would make this system more secure,
+however,
+<code>shasum</code> was chosen,
+since it comes pre-installed on most machines</li>
+
+</ul>
+
+</section>
+
+</body>
+
+</html>

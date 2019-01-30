@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "password generator",
+  "version": "0.1",
+  "description": "http://lent.ink/projects/pwd",
+  "permissions": [ "tabs" ],
+  "browser_action": {
+    "name": "Generate Password"
+  },
+  "background" : {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
+}
