@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "password generator",
   "version": "0.1",
-  "description": "http://lent.ink/projects/pwd",
+  "description": "Open source password generator using standard Unix commands. github.com/svlentink/password-generator",
   "permissions": [ "tabs", "storage" ],
   "browser_action": {
     "name": "Generate Password",

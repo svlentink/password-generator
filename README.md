@@ -85,7 +85,7 @@ and found out that 9858 have no number [0-9],
 and 2 have no capital letter [A-Z].
 To be sure that all three type of characters are present,
 we append
-```
+```shell
 |grep [0-9]|grep [A-Z]|grep [a-z]
 ```
 to our initial command.
