@@ -1,13 +1,13 @@
 SVL = {}; SVL.storage = {};
 SVL.storage.get = function(callback, key = 'mainkey') {
-  if (chrome && chrome.storage) // this requires 'storage' permissions in the manifest.json
+  if (window.chrome && chrome.storage) // this requires 'storage' permissions in the manifest.json
     chrome.storage.local.get([key],function(result){
       callback(result[key])
     })
   else callback( localStorage.getItem(key) )
 }
 SVL.storage.set = function(value, key = 'mainkey') {
-  if (chrome && chrome.storage) {
+  if (window.chrome && chrome.storage) {
     var obj = {}; obj[key] = value
     chrome.storage.local.set(obj)
   }
@@ -101,7 +101,7 @@ function getApexFromChrome(){
     document.querySelector('#apex').value = domain
   })
 }
-if (chrome && chrome.tabs) getApexFromChrome()
+if (window.chrome && chrome.tabs) getApexFromChrome()
 else {
   if (window.location.hash)
     document.querySelector('#apex').value = window.location.hash.substr('1')
