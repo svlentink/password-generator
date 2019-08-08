@@ -123,6 +123,10 @@ to the command.
 The motivation for this password manager was the backup requirement
 of normal password managers,
 which need to be done secure.
+One colleague of mine once had his password manager report that the file was corrupted,
+resulting in the lost of all his passwords,
+thus the backup should also have versioning.
+
 This solution does not have this requirement,
 you just remember the master passphrase(s).
 
