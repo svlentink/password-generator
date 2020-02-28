@@ -71,7 +71,7 @@ function save() {
 }
 
 function enlargeOutputfld() {
-  document.getElementById('output').style = 'width:275px;'
+  document.getElementById('output').style.width = '275px'
 }
 
 //set the saved password from localstorage
