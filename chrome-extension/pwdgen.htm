@@ -46,7 +46,9 @@ p {
 <body>
 
 <section id='pwdgen'>
-<!--insert-h1-here-->
+<!--include-in-webversion
+<h1>Password generator</h1>
+include-in-webversion-->
 
 <button id='showHelpBtn'>?</button>
 <p>
@@ -65,10 +67,11 @@ p {
   <input id="apex" value="google.com"/>
   <p>
     Use 'google.com' and not 'www.google.com'.
-    The <a href='pass-gen-chrome-ext.zip'>chrome-extension</a>
+    The chrome-extension
     does this for you.
-    We suggest keeping a spreadsheet with all domain + username
-    you use (but NOT the password!).
+    We suggest keeping a spreadsheet with all domains and their username,
+    and a hint when using multiple passphrases
+    (e.g. 'work2020' for the passphrase for work related accounts).
   </p>
 </article>
 <article>
@@ -128,11 +131,13 @@ p {
 <hr/>
 <section>
 Is it secure? how does it work?
+<!--include-in-webversion
 the
-<!--<a href='pass-gen-chrome-ext.zip'>-->
 <a href='https://chrome.google.com/webstore/detail/password-generator/jfifacfjklgckibildbhokcaknpgjgaf'>chrome-extension</a>
+include-in-webversion-->
 and the source code can all be found at:
-<a href='https://github.com/svlentink/password-generator'>github.com/svlentink/password-generator</a>
+<br/>
+<!--include-in-webversion<a href='https://github.com/svlentink/password-generator'>include-in-webversion-->github.com/svlentink/password-generator<!--include-in-webversion</a>include-in-webversion-->
 </section>
 
 <script src="crypto-js.js"></script>

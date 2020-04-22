@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "password generator",
-  "version": "0.2",
-  "description": "Open source password generator using standard Unix commands. github.com/svlentink/password-generator",
+  "version": "0.2.1",
+  "description": "Open source password generator based on standard Unix commands.",
   "permissions": [ "tabs", "storage" ],
   "browser_action": {
     "name": "Generate Password",
