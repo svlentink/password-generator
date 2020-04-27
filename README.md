@@ -157,3 +157,13 @@ since it comes pre-installed on most machines
 Generated a password in the past?
 The old version can be found
 [here](https://lent.ink/projects/pwd/v1.html)
+
+Or if you used the
+[s](https://chrome.google.com/webstore/detail/password-generator/nnjgaeekiplalipomfgacalgehhcckbp)
+i
+[m](https://chrome.google.com/webstore/detail/passcodes/pjgdijdkpgkjcbmedadeohddhlngeege)
+[i](https://chrome.google.com/webstore/detail/onepass-password-manager/emeedobobbobllpippjidhpiigoffbbj)
+[l](https://chrome.google.com/webstore/detail/masterpassword-for-chrome/hifbblnjfcimjnlhibannjoclibgedmd)
+a
+[r](https://chrome.google.com/webstore/detail/password-generator/klfojgipmkdgfmikjfdhhkjlfeboaoij)
+app.
