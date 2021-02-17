@@ -5,12 +5,12 @@ if [ "$1" = "-s" ]; then
 	shift
 fi
 
-APEX="$1"
-shift
-if [ -z "$APEX" ]; then
+if [ -z "$1" ]; then
 	echo "USAGE: $0 [-s] apex.tld"
 	exit 1
 fi
+APEX="$1"
+shift
 
 if [ -n "$1" ]; then
 	PASSPHRASE="$1"
