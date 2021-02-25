@@ -13,7 +13,7 @@ ENCRYPTED_NAME=$ORIGINAL_NAME".tgz.gpg"
 SECRET=`./password-generator.sh "$ENCRYPTED_NAME"`
 
 if [[ "$INPUT" == *".tgz.gpg" ]];then
-	gpg -d --batch --passphrase "$SECRET" "$ENCRYPTED_NAME"|tar xz > "$ORIGINAL_NAME"
+	gpg -d --batch --passphrase "$SECRET" "$ENCRYPTED_NAME"|tar xz
 else
 	tar cz "$ORIGINAL_NAME"|gpg -c --batch --passphrase "$SECRET" -o "$ENCRYPTED_NAME"
 fi

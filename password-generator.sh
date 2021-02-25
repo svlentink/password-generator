@@ -16,7 +16,7 @@ if [ -n "$1" ]; then
 	PASSPHRASE="$1"
 	shift
 else
-	read -p "Please enter your secret phrase between quotes:" PASSPHRASE
+	read -p "Please enter your secret phrase:" PASSPHRASE
 fi
 
 get_hash() {
