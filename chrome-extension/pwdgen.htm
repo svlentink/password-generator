@@ -103,8 +103,8 @@ include-in-webversion-->
   </p>
   Generate password
   <br/>
-  <button id='fullpwdbtn'>full size (28)</button>
-  <button id='shortpwdbtn'>short (12)</button>
+  <button id='fullpwdbtn58'>full size (30)</button>
+  <button id='shortpwdbtn58'>short (12)</button>
   <br/>
   and copy to clipboard
 </article>
@@ -140,7 +140,16 @@ and the source code can all be found at:
 <!--include-in-webversion<a href='https://github.com/svlentink/password-generator'>include-in-webversion-->github.com/svlentink/password-generator<!--include-in-webversion</a>include-in-webversion-->
 </section>
 
+<hr/>
+<section>
+  Old version (base64 instead of base58)
+  <br/>
+  <button id='fullpwdbtn64'>b64_28</button>
+  <button id='shortpwdbtn64'>b64_12</button>
+</section>
+
 <script src="crypto-js.js"></script>
+<script src="bs58.bundle.js"></script>
 <script src='pwdgen.js'></script>
 </body>
 

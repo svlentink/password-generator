@@ -17,7 +17,7 @@ How to install this unpacked chrome extension:
 + click on 'Load Unpacked' (top left)
 + now select the unzipped folder
 
-The chrome-extension should now be present
+The chrome-extension should now be installed.
 
 ## Is it secure?
 
@@ -43,40 +43,40 @@ _but requires more parameters and does not come preinstalled_ (`shasum`).
 
 It is inspired by [Stanford PwdHash](https://pwdhash.github.io/website/)
 and works by doing
-`base64( shasum(apex.tld + PASSPHRASE) )`
+`base58( shasum(apex.tld + PASSPHRASE) )`
 
 It is a concatenation of the domain you want a password for,
 together with a phrase that you use.
 This string is then used to calculate a hash.
 This hash uses base16 or
 [hexadecimal](https://stackoverflow.com/questions/12618321/what-pool-of-characters-do-md5-and-sha-have)
-resulting in 40 characters, which we convert to bas64 (28 characters).
+resulting in 40 characters, which we convert to base58 (27/28 characters).
 
 ## Technical
 
 Since multiple websites have a upperlimit of 32 characters for a password,
-this tool now only supports 28 character (160bit) passwords.
+this tool now only supports 30 character (160bit) passwords.
 
 We do two SHA rounds, preventing
 [brute force](https://crypto.stackexchange.com/questions/47177/would-sha1-be-broken-by-sheer-brute-force-even-if-it-had-no-weaknesses-of-its-o)
 searching for the master passphrase (not needed atm. but makes it future proof).
 
 The first round (`sha512sum`) to prevent an offline attack when 1 or more passwords are leaked
-and the second round (`sha1sum`) to have 40 characters base16, which we convert to base64, resulting in 28 characters.
+and the second round (`sha1sum`) to have 40 characters base16, which we convert to base58, resulting in 27/28 characters.
 ```shell
-echo -n 'apex.tldPASSPHRASE' \
+echo -n "_-`echo -n 'apex.tldPASSPHRASE' \
   | sha512sum \
   | tr -d '\n -' \
   | sha1sum \
   | cut -f1 -d' ' \
   | xxd -r -p \
-  | base64
+  | base58`"
 # or all on one line
- echo -n 'apex.tldPASSPHRASE'|sha512sum|tr -d '\n -'|sha1sum|cut -f1 -d' '|xxd -r -p|base64
+ echo -n 'apex.tldPASSPHRASE'|sha512sum|tr -d '\n -'|sha1sum|cut -f1 -d' '|xxd -r -p|base58
 ```
 (to avoid storing `history`, prepend a space to `echo`)
 
-This provides us with 28 chars of which the last one is a special char ('=').
+This provides us with 27/28 chars, which we prefix with `_-` (underscore hyphen).
 
 
 ### Padding
@@ -114,7 +114,7 @@ making it occur more often for shorter passwords.
 To achieve this on your terminal,
 just append
 ```shell
-|cut -c17-28
+|cut -c1-12
 ```
 to the command.
 
@@ -155,10 +155,12 @@ since it comes pre-installed on most machines
 ## Old version
 
 Generated a password in the past?
-The old version can be found
+The first version using prefix can be found
 [here](https://lent.ink/projects/pwd/v1.html)
+and the source code using base64
+[here](https://github.com/svlentink/password-generator/tree/f492b3243caed3e7dc5cb5266f4c1b8af3d261b5).
 
-Or if you used the
+Or if you used a
 [s](https://chrome.google.com/webstore/detail/password-generator/nnjgaeekiplalipomfgacalgehhcckbp)
 i
 [m](https://chrome.google.com/webstore/detail/passcodes/pjgdijdkpgkjcbmedadeohddhlngeege)

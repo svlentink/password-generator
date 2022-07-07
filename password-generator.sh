@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ -z "`which base58`" ]; then
+	apt install -y python3-setuptools base58
+fi
+
 if [ "$1" = "-s" ]; then
 	USING_SHORT=1
 	shift
@@ -21,15 +25,15 @@ fi
 
 get_hash() {
 	INPUT="$1"
-	initial=`echo -n "$INPUT" \
+	initial="_-`echo -n "$INPUT" \
 		| sha512sum \
 		| tr -d '\n -' \
 		| sha1sum \
 		| cut -f1 -d' ' \
 		| xxd -r -p \
-		| base64`
+		| base58`"
 	if [ "$USING_SHORT" = 1 ]; then
-		h=`echo -n $initial|cut -c17-28`
+		h=`echo -n $initial|cut -c1-12`
 	else
 		h="$initial"
 	fi

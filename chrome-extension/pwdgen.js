@@ -14,38 +14,51 @@ SVL.storage.set = function(value, key = 'mainkey') {
   else localStorage.setItem(key, value)
 }
 
-function genPwdHash(apex,secret,maxlength){
+function bs58algo(inp){
+  //let bytes = Buffer.from(inp)
+  return bs58.encode(inp) //bytes)
+}
+
+function genPwdHash(apex,secret,prefix="",algo=bs58algo,maxlength=30){
   var str = apex + secret
   for (var i=0;i<100;i++) {
     var hash1 = CryptoJS.SHA512(str).toString()
     console.log('First hash, the sha512sum',hash1, hash1.length)
     var hash2 = CryptoJS.SHA1(hash1).toString()
-    console.log('Hash used for base64',hash2, hash2.length)
+    console.log('Hash used for base??',hash2, hash2.length)
     var pairs = hash2.match(/\w{2}/g)
     var binarr = pairs.map(function(a){return String.fromCharCode(parseInt(a, 16));} )
     var binstr = binarr.join("")
-    var base64 = btoa(binstr)
-    if (base64.length > maxlength)
-      base64 = base64.substr(base64.length - maxlength)
-    if ( /[0-9]/.test(base64)
-        && /[A-Z]/.test(base64)
-        && /[a-z]/.test(base64) )
+    console.log('pairs',pairs,'binarr',binarr,'binstr',binstr)
+    var baseX = prefix
+    if (algo === btoa)
+      baseX += algo(binstr)
+    else
+      baseX += algo(binarr)
+    let substr_args
+    if (algo === btoa)
+      substr_args = [baseX.length - maxlength] // grab end of hash
+    else
+      substr_args = [0, maxlength]
+    if (baseX.length > maxlength)
+      baseX = baseX.substr(...substr_args)
+    if ( /[0-9]/.test(baseX)
+        && /[A-Z]/.test(baseX)
+        && /[a-z]/.test(baseX) )
       break
     else {
       str += 'p'
       console.log('Adding a p as padding')
     }
   }
-  return base64
+  return baseX
 }
 
-function shortpwd(){ generate(12) }
-function fullpwd(){ generate(28) }
 
-function generate(maxlength) {
+function generate(prefix,maxlength,algo) {
   var apex = document.getElementById('apex').value
   var secret = getSecVal()
-  var pwd = genPwdHash(apex, secret, maxlength).toString()
+  var pwd = genPwdHash(apex, secret, prefix, algo, maxlength).toString()
   var outp = document.getElementById('output')
   outp.value = pwd
   outp.disabled = false
@@ -107,10 +120,13 @@ else {
     document.querySelector('#apex').value = window.location.hash.substr('1')
 }
 
+PREFIX="_-"
 document.querySelector('#eyebtn').addEventListener('click',eye)
 document.querySelector('#savebtn').addEventListener('click',save)
-document.querySelector('#fullpwdbtn').addEventListener('click',fullpwd)
-document.querySelector('#shortpwdbtn').addEventListener('click',shortpwd)
+document.querySelector('#fullpwdbtn58').addEventListener('click',()=>{generate(PREFIX)})
+document.querySelector('#shortpwdbtn58').addEventListener('click',()=>{generate(PREFIX,12)})
+document.querySelector('#fullpwdbtn64').addEventListener('click',()=>{generate("",30,btoa)})
+document.querySelector('#shortpwdbtn64').addEventListener('click',()=>{generate("",12,btoa)})
 document.querySelector('#enlargeOutputfldbtn').addEventListener('click',enlargeOutputfld)
 document.querySelector('#showHelpBtn').addEventListener('click',function(){
   var ps = document.querySelectorAll('p')
