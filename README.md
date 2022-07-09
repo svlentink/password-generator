@@ -64,14 +64,14 @@ searching for the master passphrase (not needed atm. but makes it future proof).
 The first round (`sha512sum`) to prevent an offline attack when 1 or more passwords are leaked
 and the second round (`sha1sum`) to have 40 characters base16, which we convert to base58, resulting in 27/28 characters.
 ```shell
-echo -n "_-`echo -n 'apex.tldPASSPHRASE' \
+echo -n "`echo -n 'apex.tldPASSPHRASE' \
   | sha512sum \
   | tr -d '\n -' \
   | sha1sum \
   | cut -f1 -d' ' \
   | xxd -r -p \
-  | base58`"
-# or all on one line
+  | base58`-_"
+# or on one line
  echo -n 'apex.tldPASSPHRASE'|sha512sum|tr -d '\n -'|sha1sum|cut -f1 -d' '|xxd -r -p|base58
 ```
 (to avoid storing `history`, prepend a space to `echo`)

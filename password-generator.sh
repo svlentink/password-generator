@@ -25,13 +25,13 @@ fi
 
 get_hash() {
 	INPUT="$1"
-	initial="_-`echo -n "$INPUT" \
+	initial="`echo -n "$INPUT" \
 		| sha512sum \
 		| tr -d '\n -' \
 		| sha1sum \
 		| cut -f1 -d' ' \
 		| xxd -r -p \
-		| base58`"
+		| base58`-_"
 	if [ "$USING_SHORT" = 1 ]; then
 		h=`echo -n $initial|cut -c1-12`
 	else
