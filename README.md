@@ -76,7 +76,10 @@ echo -n "_-`echo -n 'apex.tldPASSPHRASE' \
 ```
 (to avoid storing `history`, prepend a space to `echo`)
 
-This provides us with 27/28 chars, which we prefix with `_-` (underscore hyphen).
+This provides us with 27/28 chars, which we postfix with `-_` (hyphen underscore).
+We do this at the end so when a website does not allow these special chars,
+you can hit backspace after pasting and create a mnemonic
+(e.g. `28-2` or `12-2` i.e. `12` minus `2` special chars).
 
 
 ### Padding

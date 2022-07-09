@@ -19,29 +19,36 @@ function bs58algo(inp){
   return bs58.encode(inp) //bytes)
 }
 
-function genPwdHash(apex,secret,prefix="",algo=bs58algo,maxlength=30){
+function hexToBytes(hex) { // Copied from CryptoJS
+  for (var bytes = [], c = 0; c < hex.length; c += 2)
+      bytes.push(parseInt(hex.substr(c, 2), 16));
+  return bytes;
+}
+
+function hexToBinstr(hex) {
+  var pairs = hex.match(/\w{2}/g)
+  var binarr = pairs.map(function(a){return String.fromCharCode(parseInt(a, 16));} )
+  var binstr = binarr.join("")
+  console.log('pairs',pairs,'binarr',binarr,'binstr',binstr)
+  return binstr
+}
+
+function genPwdHash(apex,secret,postfix="",algo=bs58algo,maxlength=30){
   var str = apex + secret
-  for (var i=0;i<100;i++) {
+  for (var i=0;i<10;i++) {
     var hash1 = CryptoJS.SHA512(str).toString()
     console.log('First hash, the sha512sum',hash1, hash1.length)
     var hash2 = CryptoJS.SHA1(hash1).toString()
     console.log('Hash used for base??',hash2, hash2.length)
-    var pairs = hash2.match(/\w{2}/g)
-    var binarr = pairs.map(function(a){return String.fromCharCode(parseInt(a, 16));} )
-    var binstr = binarr.join("")
-    console.log('pairs',pairs,'binarr',binarr,'binstr',binstr)
-    var baseX = prefix
+    var baseX;
     if (algo === btoa)
-      baseX += algo(binstr)
+      baseX = algo(hexToBinstr(hash2))
     else
-      baseX += algo(binarr)
-    let substr_args
-    if (algo === btoa)
-      substr_args = [baseX.length - maxlength] // grab end of hash
-    else
-      substr_args = [0, maxlength]
+      baseX = algo(hexToBytes(hash2)) + postfix
+    console.log('baseX.length', baseX.length, baseX)
     if (baseX.length > maxlength)
-      baseX = baseX.substr(...substr_args)
+      baseX = baseX.substr(baseX.length - maxlength) // grab end of hash
+    console.log('baseX',baseX)
     if ( /[0-9]/.test(baseX)
         && /[A-Z]/.test(baseX)
         && /[a-z]/.test(baseX) )
@@ -55,10 +62,10 @@ function genPwdHash(apex,secret,prefix="",algo=bs58algo,maxlength=30){
 }
 
 
-function generate(prefix,maxlength,algo) {
+function generate(postfix,maxlength,algo) {
   var apex = document.getElementById('apex').value
   var secret = getSecVal()
-  var pwd = genPwdHash(apex, secret, prefix, algo, maxlength).toString()
+  var pwd = genPwdHash(apex, secret, postfix, algo, maxlength).toString()
   var outp = document.getElementById('output')
   outp.value = pwd
   outp.disabled = false
@@ -120,11 +127,11 @@ else {
     document.querySelector('#apex').value = window.location.hash.substr('1')
 }
 
-PREFIX="_-"
+POSTFIX="_-"
 document.querySelector('#eyebtn').addEventListener('click',eye)
 document.querySelector('#savebtn').addEventListener('click',save)
-document.querySelector('#fullpwdbtn58').addEventListener('click',()=>{generate(PREFIX)})
-document.querySelector('#shortpwdbtn58').addEventListener('click',()=>{generate(PREFIX,12)})
+document.querySelector('#fullpwdbtn58').addEventListener('click',()=>{generate(POSTFIX)})
+document.querySelector('#shortpwdbtn58').addEventListener('click',()=>{generate(POSTFIX,12)})
 document.querySelector('#fullpwdbtn64').addEventListener('click',()=>{generate("",30,btoa)})
 document.querySelector('#shortpwdbtn64').addEventListener('click',()=>{generate("",12,btoa)})
 document.querySelector('#enlargeOutputfldbtn').addEventListener('click',enlargeOutputfld)
