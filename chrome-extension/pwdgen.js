@@ -127,7 +127,7 @@ else {
     document.querySelector('#apex').value = window.location.hash.substr('1')
 }
 
-POSTFIX="_-"
+POSTFIX="-_"
 document.querySelector('#eyebtn').addEventListener('click',eye)
 document.querySelector('#savebtn').addEventListener('click',save)
 document.querySelector('#fullpwdbtn58').addEventListener('click',()=>{generate(POSTFIX)})
