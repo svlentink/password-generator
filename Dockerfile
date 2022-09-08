@@ -15,7 +15,7 @@ RUN mkdir -p `dirname $OUTPATH`
 # Now we move the static website
 # to the path we would visit in the browser
 # this container thus specifies the path
-RUN mv public $OUTPATH
+RUN mv public pass-gen-chrome-ext.zip $OUTPATH
 
 FROM scratch
 COPY --from=build /data /data

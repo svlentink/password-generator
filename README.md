@@ -10,7 +10,7 @@ and as a
 THIS IS NOT NEEDED, see link above.
 
 How to install this unpacked chrome extension:
-+ download the files in the folder `chrome-extension` ([link to zip](https://lent.ink/projects/pwd/pass-gen-chrome-ext.zip)
++ download the files in the folder `chrome-extension` ([link to zip](https://lent.ink/projects/pwd/pass-gen-chrome-ext.zip))
 + unzip the archive
 + go to `chrome://extensions`
 + enable developers mode (top right)
@@ -79,7 +79,7 @@ echo -n "`echo -n 'apex.tldPASSPHRASE' \
 This provides us with 27/28 chars, which we postfix with `-_` (hyphen underscore).
 We do this at the end so when a website does not allow these special chars,
 you can hit backspace after pasting and create a mnemonic
-(e.g. `28-2` or `12-2` i.e. `12` minus `2` special chars).
+(e.g. `30-2` or `12-2` i.e. `12` minus `2` special chars).
 
 
 ### Padding

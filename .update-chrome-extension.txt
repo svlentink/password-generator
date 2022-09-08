@@ -1,0 +1,2 @@
+- chrome-ext-preview.png
+- chrome-extension/manifest.json -> version number
