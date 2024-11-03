@@ -3,6 +3,7 @@
 if [ -z "$1" ];then
 	echo "USAGE: $0 file-or-folder-to-encrypt"
 	echo "USAGE: $0 file-to-decrypt.tgz.gpg"
+	echo "TIP: in case you manually manage files with secrets, you might want to use git (local!) to determine which backup has the latest version"
 	exit 1
 fi
 
